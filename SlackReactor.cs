@@ -6,7 +6,6 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -31,16 +30,16 @@ namespace Seq.Slack
         private static readonly HttpClient HttpClient = new HttpClient();
         private readonly ConcurrentDictionary<uint, DateTime> _lastSeen = new ConcurrentDictionary<uint, DateTime>();
 
-        private static readonly ImmutableDictionary<LogEventLevel, string> LevelToColor = (new Dictionary<LogEventLevel, string> {
+        private static readonly IReadOnlyDictionary<LogEventLevel, string> LevelToColor = new Dictionary<LogEventLevel, string> {
             {LogEventLevel.Verbose,"#D3D3D3"},
             {LogEventLevel.Debug,"#D3D3D3"},
             {LogEventLevel.Information,"#00A000"},
             {LogEventLevel.Warning,"#f9c019"},
             {LogEventLevel.Error,"#e03836"},
             {LogEventLevel.Fatal,"#e03836"},
-        }).ToImmutableDictionary();
+        };
 
-        private static readonly ImmutableList<string> SpecialProperties = ImmutableList.Create("Id", "Host");
+        private static readonly IReadOnlyList<string> SpecialProperties = new[] {"Id", "Host"};
 
         public void On(Event<LogEventData> evt)
         {
